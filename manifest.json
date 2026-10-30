@@ -1,0 +1,14 @@
+{
+  "name": "Kapsel",
+  "short_name": "Kapsel",
+  "description": "Byg en kapselgarderobe fra danske butikker.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F6F3EE",
+  "theme_color": "#F6F3EE",
+  "icons": [
+    { "src": "logo192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "logo512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

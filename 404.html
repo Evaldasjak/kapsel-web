@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data: blob:; connect-src 'self' https: data: blob:; font-src 'self' data:; manifest-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Kapsel</title>
+    <meta name="description" content="Byg en kapselgarderobe fra danske butikker." />
+    <meta name="theme-color" content="#F6F3EE" />
+    <!-- Home-screen app on iPhone: icon, name, and opening without Safari's bars.
+         Links are relative so they work under the published sub-path too. -->
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Kapsel" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
+    <style id="expo-reset">
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+        background-color: #f6f3ee;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+    <!-- Everything that can be clicked zooms in a little under the mouse, so
+         the web version feels alive. Only where there is a real mouse: on a
+         phone a tap would leave it stuck zoomed. Greyed-out buttons stay put.
+         The pieces on the outfit picture zoom from src/components/Collage.tsx. -->
+    <style id="kapsel-hover">
+      @media (hover: hover) and (pointer: fine) {
+        [role="button"],
+        [role="link"] {
+          transition: transform 0.18s ease;
+        }
+        [role="button"]:not([aria-disabled="true"]):hover,
+        [role="link"]:hover {
+          transform: scale(1.04);
+        }
+        /* The pieces' cards in the capsule's list (src/app/capsule.tsx): the
+           card lifts a little, its picture zooms. */
+        [data-hover="card"],
+        [data-hover="thumb"] {
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        [data-hover="card"]:hover {
+          transform: scale(1.02);
+          box-shadow: 0 6px 18px rgba(30, 27, 24, 0.1);
+        }
+        [data-hover="card"]:hover [data-hover="thumb"] {
+          transform: scale(1.06);
+        }
+      }
+    </style>
+  <link rel="icon" href="/kapsel-web/favicon.ico"/></head>
+
+  <body>
+    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
+    <noscript> You need to enable JavaScript to run this app. </noscript>
+    <!-- The root element for your Expo app. -->
+    <div id="root"></div>
+  <script src="/kapsel-web/_expo/static/js/web/__expo-metro-runtime-8c088df87a31e4e6accd81c554ec290d.js" defer></script><script src="/kapsel-web/_expo/static/js/web/__common-22599422ebd3bc0e00cf52dee93979bb.js" defer></script><script src="/kapsel-web/_expo/static/js/web/entry-d1af840053db28e4b459afb9d86117b7.js" defer></script>
+</body>
+</html>
