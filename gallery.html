@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data: blob:; connect-src 'self' https: data: blob:; font-src 'self' data:; manifest-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Kapsel</title>
+    <meta name="description" content="Byg en kapselgarderobe fra danske butikker." />
+    <!-- Until launch, only people with the link should find the app: search
+         engines are asked not to list it or follow its links. Remove this
+         when Kapsel moves to its real address. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- What a shared link shows in Messenger, Instagram, iMessage and the
+         like: a title, a line and a picture (public/og.jpg, 1200 × 630, cut
+         from the front picture). The picture's address must be a full one:
+         change it too when Kapsel moves to its real address. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Kapsel" />
+    <meta property="og:title" content="Kapsel – Færre stykker tøj. Flere outfits." />
+    <meta property="og:description" content="Byg en kapselgarderobe fra danske butikker, og se outfittene på en dukke." />
+    <meta property="og:image" content="https://evaldasjak.github.io/kapsel-web/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <!-- Home-screen app on iPhone: icon, name, and opening without Safari's bars.
+         Links are relative so they work under the published sub-path too. -->
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Kapsel" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
+    <style id="expo-reset">
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+        background-color: #ffffff;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+    <!-- The fonts, shipped with the site (public/fonts/, both under the SIL
+         Open Font License): Playfair Display for the wordmark and titles,
+         Inter for everything else (src/lib/theme.ts). Chosen for clear
+         letters: no hairline strokes, an open "e". Latin and Latin Extended
+         cover Danish and Lithuanian. -->
+    <style id="kapsel-fonts">
+      @font-face {
+        font-family: 'Playfair Display';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400 900;
+        src: url(fonts/playfair-display-latin.woff2) format('woff2-variations');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+          U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Playfair Display';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400 900;
+        src: url(fonts/playfair-display-latin-ext.woff2) format('woff2-variations');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 100 900;
+        src: url(fonts/inter-latin.woff2) format('woff2-variations');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+          U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 100 900;
+        src: url(fonts/inter-latin-ext.woff2) format('woff2-variations');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+    </style>
+    <!-- Hover, on computers only (a real mouse; on a phone a tap would leave
+         it stuck). Small buttons zoom a little; the big buttons (data-cta)
+         fill with a colour sweeping in; the header's links (data-navlink)
+         draw a thin line underneath; cards (data-hover="card") lift with a
+         soft shadow while their picture (data-zoom) slowly zooms. Greyed-out
+         buttons stay put. -->
+    <style id="kapsel-hover">
+      @media (hover: hover) and (pointer: fine) {
+        [role='button'],
+        [role='link'] {
+          transition: transform 0.18s ease;
+        }
+        [role='button']:not([aria-disabled='true']):not([data-cta]):not([data-hover]):not([data-tile]):hover,
+        [role='link']:not([data-navlink]):not([data-hover]):hover {
+          transform: scale(1.04);
+        }
+        [data-cta] {
+          position: relative;
+          overflow: hidden;
+          isolation: isolate;
+        }
+        [data-cta]::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          z-index: -1;
+          background: #3d3630;
+          transform: scaleX(0);
+          transform-origin: right;
+          transition: transform 0.5s cubic-bezier(0.2, 0.6, 0.2, 1);
+        }
+        [data-cta='outline']::before,
+        [data-cta='light']::before {
+          background: #111111;
+        }
+        [data-cta]:hover::before {
+          transform: none;
+          transform-origin: left;
+        }
+        [data-cta='outline'] [dir='auto'],
+        [data-cta='light'] [dir='auto'] {
+          transition: color 0.3s ease;
+        }
+        [data-cta='outline']:hover [dir='auto'],
+        [data-cta='light']:hover [dir='auto'] {
+          color: #ffffff;
+        }
+        /* Their drawn icons turn white with the words. */
+        [data-cta='outline'] svg path,
+        [data-cta='light'] svg path {
+          transition: stroke 0.3s ease;
+        }
+        [data-cta='outline']:hover svg path,
+        [data-cta='light']:hover svg path {
+          stroke: #ffffff;
+        }
+        [data-navlink]::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 12px;
+          height: 1px;
+          background: currentColor;
+          transform: scaleX(0);
+          transform-origin: right;
+          transition: transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1);
+        }
+        [data-navlink]:hover::after {
+          transform: none;
+          transform-origin: left;
+        }
+        [data-hover='card'] {
+          transition: transform 0.45s cubic-bezier(0.2, 0.6, 0.2, 1), box-shadow 0.45s ease;
+        }
+        [data-hover='card']:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 18px 36px -14px rgba(0, 0, 0, 0.25);
+        }
+        /* Tiles (gallery pictures): the picture lifts, and zooms inside. */
+        [data-tileimg] {
+          transition: transform 0.45s cubic-bezier(0.2, 0.6, 0.2, 1), box-shadow 0.45s ease;
+        }
+        [data-tile]:hover [data-tileimg] {
+          transform: translateY(-4px);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 18px 36px -14px rgba(0, 0, 0, 0.3);
+        }
+        [data-tile]:hover [data-zoom] {
+          scale: 1.05;
+        }
+        [data-hover='thumb'],
+        [data-zoom] {
+          transition: scale 0.8s cubic-bezier(0.2, 0.6, 0.2, 1);
+        }
+        [data-hover='card']:hover [data-hover='thumb'],
+        [data-hover='card']:hover [data-zoom] {
+          scale: 1.05;
+        }
+      }
+    </style>
+    <!-- Buttons that open something (data-fold, the owner, 13 Nov 2026): on a
+         computer a line slides in along the bottom under the mouse, like the
+         header's links. Opened (aria-expanded="true"), a line runs from the
+         bottom left along the bottom, up the right side, across the top and
+         down the left until the whole button is outlined; closed, the
+         outline fades. "box" sits on the button's own border, and "tab"
+         leaves out the bottom edge: it opens into a panel joined under it.
+         "row" is a whole item of a list (a question and its answer, a
+         category and its pieces), open when data-open="true", outlined a
+         little outside it so what opened sits inside the same outline (the
+         owner, 13 Nov 2026: "like they are two different things"). What
+         opens (data-drop) unfolds from the top. -->
+    <style id="kapsel-fold">
+      [data-fold]::before {
+        content: '';
+        position: absolute;
+        inset: 0 -12px -1px;
+        border: 1px solid #111111;
+        border-radius: 2px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      [data-fold='box']::before,
+      [data-fold='tab']::before {
+        inset: -1px;
+      }
+      [data-fold='tab']::before {
+        border-bottom-color: transparent;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      [data-fold][aria-expanded='true']::before,
+      [data-fold][data-open='true']::before {
+        opacity: 1;
+        transition: none;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        [data-fold][aria-expanded='true']::before,
+        [data-fold][data-open='true']::before {
+          animation: kapsel-trace 0.8s cubic-bezier(0.45, 0, 0.25, 1) both;
+        }
+        [data-drop] {
+          animation: kapsel-drop 0.45s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+        }
+      }
+      @keyframes kapsel-trace {
+        0% { clip-path: polygon(50% 50%, 0 100%, 0 100%, 0 100%, 0 100%, 0 100%); }
+        25% { clip-path: polygon(50% 50%, 0 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%); }
+        40% { clip-path: polygon(50% 50%, 0 100%, 100% 100%, 100% 0, 100% 0, 100% 0); }
+        85% { clip-path: polygon(50% 50%, 0 100%, 100% 100%, 100% 0, 0 0, 0 0); }
+        100% { clip-path: polygon(50% 50%, 0 100%, 100% 100%, 100% 0, 0 0, 0 100%); }
+      }
+      @keyframes kapsel-drop {
+        from { opacity: 0.3; transform: translateY(-6px); clip-path: inset(-2px -40px 100% -40px); }
+        to { opacity: 1; transform: none; clip-path: inset(-2px -40px -40px -40px); }
+      }
+      @media (hover: hover) and (pointer: fine) {
+        [data-fold]::after {
+          content: '';
+          position: absolute;
+          left: -12px;
+          right: -12px;
+          bottom: -1px;
+          height: 1px;
+          background: #111111;
+          pointer-events: none;
+          transform: scaleX(0);
+          transform-origin: right;
+          transition: transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1);
+        }
+        [data-fold='box']::after,
+        [data-fold='tab']::after {
+          left: -1px;
+          right: -1px;
+          bottom: -1px;
+        }
+        [data-fold]:hover::after {
+          transform: none;
+          transform-origin: left;
+        }
+        /* Opened into its panel: the line under it goes, so the two join. */
+        [data-fold='tab'][aria-expanded='true']::after {
+          transform: scaleX(0);
+          transition-delay: 0.45s;
+        }
+      }
+    </style>
+    <!-- The mark on the chosen item of a group (data-snake, Slide.tsx; the
+         owner, 13 Nov 2026) slides to a new choice like a snake: the edge in
+         the direction of travel goes first, the other follows. The order of
+         the delays is left, right, top, bottom. "still" places it at once (the
+         first choice, a window resized). Words on a dark box that slides in
+         change colour once it has arrived (data-snaketext). -->
+    <style id="kapsel-snake">
+      @media (prefers-reduced-motion: no-preference) {
+        [data-snake]:not([data-snake='still']) {
+          transition-property: left, right, top, bottom;
+          transition-duration: 0.32s, 0.32s, 0.32s, 0.32s;
+          transition-timing-function: cubic-bezier(0.55, 0.05, 0.25, 1);
+        }
+        [data-snake='right-none'] { transition-delay: 0.12s, 0s, 0.06s, 0.06s; }
+        [data-snake='left-none'] { transition-delay: 0s, 0.12s, 0.06s, 0.06s; }
+        [data-snake='none-down'] { transition-delay: 0.06s, 0.06s, 0.12s, 0s; }
+        [data-snake='none-up'] { transition-delay: 0.06s, 0.06s, 0s, 0.12s; }
+        [data-snake='right-down'] { transition-delay: 0.12s, 0s, 0.12s, 0s; }
+        [data-snake='right-up'] { transition-delay: 0.12s, 0s, 0s, 0.12s; }
+        [data-snake='left-down'] { transition-delay: 0s, 0.12s, 0.12s, 0s; }
+        [data-snake='left-up'] { transition-delay: 0s, 0.12s, 0s, 0.12s; }
+        [data-snaketext] { transition: color 0.2s ease 0.18s; }
+      }
+    </style>
+    <!-- Keyboard: whoever moves with Tab sees where they are (a blue ring,
+         clear on white, beige and dark alike). Not shown for mouse or touch.
+         Loading: a soft grey shimmer where a picture is on its way
+         (data-skeleton). -->
+    <style id="kapsel-focus">
+      [role='button']:focus-visible,
+      [role='link']:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      [tabindex]:focus-visible {
+        outline: 2px solid #2b6cff !important;
+        outline-offset: 2px;
+      }
+      [data-skeleton] {
+        background-image: linear-gradient(100deg, #f1efeb 30%, #faf9f7 50%, #f1efeb 70%);
+        background-size: 200% 100%;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        [data-skeleton] {
+          animation: kapsel-shimmer 1.4s linear infinite;
+        }
+      }
+      @keyframes kapsel-shimmer {
+        from {
+          background-position: 200% 0;
+        }
+        to {
+          background-position: -200% 0;
+        }
+      }
+    </style>
+    <!-- Motion, inspired by jaksten.dk: the front picture drifts slowly
+         (data-drift), its headline rises in (data-rise), lines draw in from
+         the left (data-draw), and sections fade up as they scroll into view
+         (data-reveal, switched on by src/lib/motion.tsx, which adds
+         html.motion). Nothing moves for people who ask for less motion. -->
+    <style id="kapsel-motion">
+      @media (prefers-reduced-motion: no-preference) {
+        [data-drift] {
+          animation: kapsel-drift 32s ease-in-out 1s infinite alternate;
+        }
+        [data-rise] {
+          animation: kapsel-rise 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s backwards;
+        }
+        [data-draw] {
+          animation: kapsel-draw 1.2s cubic-bezier(0.2, 0.6, 0.2, 1) 0.3s backwards;
+        }
+        html.motion [data-reveal] {
+          opacity: 0;
+          transform: translateY(22px);
+          transition: opacity 0.8s ease, transform 0.9s cubic-bezier(0.2, 0.6, 0.2, 1);
+        }
+        html.motion [data-reveal][data-in] {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      /* The front picture under the mouse (src/app/index.tsx sets --hx and
+         --hy from the mouse's place): the picture follows a little and zooms
+         in a touch, the words move slightly the other way, for depth. */
+      @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+        [data-hero] [data-drift] {
+          translate: var(--hx, 0px) var(--hy, 0px);
+          transition: translate 0.9s cubic-bezier(0.2, 0.6, 0.2, 1);
+        }
+        [data-hero] [data-herozoom] {
+          transition: scale 1.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+        }
+        [data-hero]:hover [data-herozoom] {
+          scale: 1.015;
+        }
+        [data-hero] [data-depth] {
+          translate: calc(var(--hx, 0px) * -0.35) calc(var(--hy, 0px) * -0.35);
+          transition: translate 0.9s cubic-bezier(0.2, 0.6, 0.2, 1);
+        }
+      }
+      /* Gentle, around the middle, so the hats and feet stay in view; never
+         below 1.02, so the parallax never shows an edge. With the zoom under
+         the mouse it comes to 5 % at most: `headroom` in src/app/index.tsx
+         leaves that much air over the hats. */
+      @keyframes kapsel-drift {
+        from {
+          scale: 1.02;
+          transform-origin: 40% 45%;
+        }
+        to {
+          scale: 1.035;
+          transform-origin: 60% 45%;
+        }
+      }
+      /* The budget slider (src/components/BudgetSlider.tsx): the browser's
+         own, drawn as a thin line, dark up to the thumb (--at, 0 to 1), with
+         a round dark thumb. */
+      input[data-budget] {
+        -webkit-appearance: none;
+        appearance: none;
+        display: block;
+        width: 100%;
+        height: 32px;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        cursor: pointer;
+        touch-action: pan-y;
+      }
+      input[data-budget]::-webkit-slider-runnable-track {
+        height: 4px;
+        border-radius: 2px;
+        background: linear-gradient(to right, #111111 calc(13px + (100% - 26px) * var(--at, 1)), #dcd8d0 0);
+      }
+      input[data-budget]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 26px;
+        height: 26px;
+        margin-top: -11px;
+        border-radius: 50%;
+        border: 3px solid #ffffff;
+        background: #111111;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+      }
+      input[data-budget]::-moz-range-track {
+        height: 4px;
+        border-radius: 2px;
+        background: #dcd8d0;
+      }
+      input[data-budget]::-moz-range-progress {
+        height: 4px;
+        border-radius: 2px;
+        background: #111111;
+      }
+      input[data-budget]::-moz-range-thumb {
+        box-sizing: border-box;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 3px solid #ffffff;
+        background: #111111;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+      }
+      input[data-budget]:focus-visible {
+        outline-offset: 4px;
+      }
+      /* A short text in lines of about the same length (the front page's
+         line on what Kapsel does). */
+      [data-balance] {
+        text-wrap: balance;
+      }
+      /* Min garderobe's rail (WardrobeRail.tsx): a piece lifts and swings a
+         little on its hook under the mouse, and drops when it is taken down. */
+      [data-hanger] {
+        transform-origin: 50% 0;
+        transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.3s ease;
+      }
+      @media (hover: hover) and (pointer: fine) {
+        [data-hover='hanger']:hover [data-hanger='on'] {
+          transform: translateY(-6px) rotate(-2.5deg);
+        }
+      }
+      [data-hanger='down'] {
+        transform: translateY(60px);
+        opacity: 0;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        [data-spread='in'] {
+          animation: kapsel-spread 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+        }
+      }
+      @keyframes kapsel-spread {
+        from {
+          opacity: 0;
+          translate: -28px 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        [data-hanger] {
+          transition: none;
+        }
+      }
+      /* Dukke and Dig on the front page's example (data-pulse, Collage.tsx):
+         a warm glow that comes and goes, "Se her" bobbing over them. */
+      @media (prefers-reduced-motion: reduce) {
+        [data-pulse] {
+          background-color: #f3e2c9 !important;
+        }
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        [data-pulse] {
+          animation: kapsel-pulse 2.4s ease-in-out infinite;
+        }
+        [data-pulse='2'] {
+          animation-delay: 0.4s;
+        }
+        [data-invite] {
+          animation: kapsel-bob 2.4s ease-in-out infinite;
+        }
+      }
+      @keyframes kapsel-pulse {
+        0%,
+        100% {
+          background-color: rgba(255, 255, 255, 0.95);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), 0 0 0 0 rgba(190, 130, 70, 0.6);
+        }
+        50% {
+          background-color: #f3dfc2;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18), 0 0 0 8px rgba(190, 130, 70, 0);
+        }
+      }
+      @keyframes kapsel-bob {
+        0%,
+        100% {
+          translate: 0 0;
+        }
+        50% {
+          translate: 0 -3px;
+        }
+      }
+      @keyframes kapsel-rise {
+        from {
+          opacity: 0;
+          translate: 0 0.45em;
+        }
+      }
+      @keyframes kapsel-draw {
+        from {
+          clip-path: inset(0 100% 0 0);
+        }
+      }
+    </style>
+  <link rel="icon" href="/kapsel-web/favicon.ico"/></head>
+
+  <body>
+    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
+    <noscript> You need to enable JavaScript to run this app. </noscript>
+    <!-- The root element for your Expo app. -->
+    <div id="root"></div>
+  <script src="/kapsel-web/_expo/static/js/web/__expo-metro-runtime-8c088df87a31e4e6accd81c554ec290d.js" defer></script><script src="/kapsel-web/_expo/static/js/web/__common-db970b0587d4ca74b611d6990b89ec37.js" defer></script><script src="/kapsel-web/_expo/static/js/web/entry-3b1682574cb4329b79bd9a0349529e54.js" defer></script>
+</body>
+</html>
